@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wheel Carousel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!--
+    Section verileri — JS bu listeyi DOM'dan okur, section sayısı artınca çark otomatik eşit paylaşır.
+    Razor migrasyonu: <ol> içini @foreach (var s in Model.Sections) { <li data-id="@s.Id" ...></li> } ile oluştur.
+    data-sky / data-glow / data-glow-color / data-ridge / data-crater : boşlukla ayrılmış sayı/hex değerleri
+  -->
+  <ol id="section-data" hidden aria-hidden="true">
+    <li data-id="01" data-title="Peaky Blinders"
+      data-copy="Birmingham sokaklarında korkuyla yönetilir. Tommy Shelby'nin zekâsı kurşundan keskindir — her kazanç bir hesap gerektirir."
+      data-action="AILEYE KATIL" data-map-label="small heath, 1919"
+      data-image="https://image.tmdb.org/t/p/original/l8v3gJDlASN0lNn51gR8zQJsu5O.jpg" data-year="2013 – 2022"
+      data-genre="Dram / Suç" data-platform="BBC · Netflix" data-sky="#181210 #100c0a #040402"
+      data-glow="0.48 0.44 0.42" data-glow-color="200 160 100" data-ridge="120 80 48" data-crater="0.44 0.54 0.20"
+      data-figure="0.44"></li>
+    <li data-id="02" data-title="Breaking Bad"
+      data-copy="Kanser teşhisi bir kimya öğretmenini dönüştürdü. Walter White artık yok — Heisenberg var. Ve Heisenberg asla kaybolmaz."
+      data-action="FORMÜLÜ DEĞİŞTİR" data-map-label="albuquerque, new mexico"
+      data-image="https://image.tmdb.org/t/p/original/63FA8vwSZnXkGxedrDQwni4JuZN.jpg" data-year="2008 – 2013"
+      data-genre="Dram / Gerilim" data-platform="AMC · Netflix" data-sky="#1a1600 #120f00 #060500"
+      data-glow="0.50 0.44 0.42" data-glow-color="230 210 60" data-ridge="130 110 28" data-crater="0.46 0.52 0.22"
+      data-figure="0.46"></li>
+    <li data-id="03" data-title="Game of Thrones"
+      data-copy="Taht oyununda ya kazanırsın ya ölürsün. Kış geliyor ve Westeros'ta hiçbir hanedana güvenilmez."
+      data-action="TAHTA OTURTFİX" data-map-label="westeros kıtası"
+      data-image="https://image.tmdb.org/t/p/original/uNrWu9ravxE9TkmExNKZKK47yw6.jpg" data-year="2011 – 2019"
+      data-genre="Fantastik / Aksiyon" data-platform="HBO · Netflix" data-sky="#101420 #0a0e18 #030508"
+      data-glow="0.46 0.38 0.50" data-glow-color="160 180 220" data-ridge="50 70 120" data-crater="0.42 0.52 0.18"
+      data-figure="0.40"></li>
+    <li data-id="04" data-title="Stranger Things"
+      data-copy="Hawkins'in altında başka bir dünya yatıyor. Eleven kapıyı açtı — şimdi ne Upside Down kapanıyor ne de tehlike bitmek bilmedi."
+      data-action="PORTALDAN GEÇ" data-map-label="hawkins, indiana"
+      data-image="https://image.tmdb.org/t/p/original/8CbWGYaIPRPVL9UGiV310CII8WC.jpg" data-year="2016 – 2025"
+      data-genre="Bilim Kurgu / Korku" data-platform="Netflix" data-sky="#200810 #160608 #060204"
+      data-glow="0.52 0.46 0.48" data-glow-color="220 60 120" data-ridge="140 40 80" data-crater="0.48 0.50 0.20"
+      data-figure="0.42"></li>
+    <li data-id="05" data-title="The Last of Us"
+      data-copy="Uygarlık çöktükten sonra geriye iki insan kaldı. Joel küçük bir kız çocuğunu korumak için yola çıktı — ama hayatta kalmak her zaman masum değildir."
+      data-action="YOL AL" data-map-label="post-ap. abd, 2023"
+      data-image="https://image.tmdb.org/t/p/original/acevLdSl5I2MK5RYAm7gwAndt1w.jpg" data-year="2023 –"
+      data-genre="Dram / Aksiyon" data-platform="HBO" data-sky="#0e1808 #0a1206 #040502" data-glow="0.46 0.44 0.44"
+      data-glow-color="100 160 60" data-ridge="44 90 36" data-crater="0.40 0.54 0.18" data-figure="0.38"></li>
+    <li data-id="06" data-title="Loki"
+      data-copy="Zaman Varyans Otoritesi seni izliyor. Loki bir seçimle karşı karşıya: silinmek ya da zaman çizgisini kurtarmak — ikisi de aynı cehenneme çıkıyor."
+      data-action="ZAMANLA OYUN" data-map-label="tva headquarters"
+      data-image="https://image.tmdb.org/t/p/original/q3jHCb4dMfYF6ojikKuHd6LscxC.jpg" data-year="2021 – 2023"
+      data-genre="Bilim Kurgu / Dram" data-platform="Disney+" data-sky="#1e1400 #140e00 #060400"
+      data-glow="0.50 0.42 0.44" data-glow-color="240 190 40" data-ridge="150 110 28" data-crater="0.44 0.52 0.20"
+      data-figure="0.42"></li>
+  </ol>
+
+  <div class="board-card">
+    <main class="scene" data-default-section="01" aria-label="Gorsel arayuz calismasi">
+      <div class="background background--current" aria-hidden="true"></div>
+      <div class="background background--next" aria-hidden="true"></div>
+      <canvas id="terrainCanvas" aria-hidden="true"></canvas>
+      <div class="grain" aria-hidden="true"></div>
+      <div class="shade" aria-hidden="true"></div>
+
+      <button class="info-button" aria-label="Bilgi" aria-expanded="false">
+        <span>i</span>
+      </button>
+
+      <div class="info-panel" aria-hidden="true">
+        <p class="info-panel__year"></p>
+        <p class="info-panel__genre"></p>
+        <p class="info-panel__platform"></p>
+        <p class="info-panel__source"></p>
+      </div>
+
+      <section class="wheel" aria-label="Bolum navigasyonu">
+        <div class="wheel__outer">
+          <div class="wheel__active-slice"></div>
+          <div class="wheel__segments"></div>
+        </div>
+        <div class="wheel__lens" aria-hidden="true">
+          <span class="wheel__lens-title" style="visibility: hidden;"></span>
+        </div>
+        <div class="wheel__labels"></div>
+      </section>
+
+      <section class="content" aria-label="Aktif bolum icerigi" aria-live="polite">
+        <h1></h1>
+        <span class="rule" aria-hidden="true"></span>
+        <p></p>
+        <button class="cta" type="button"></button>
+      </section>
+
+      <aside class="mini-map" aria-label="Mini harita">
+        <div class="mini-map__line mini-map__line--h"></div>
+        <div class="mini-map__line mini-map__line--v"></div>
+        <div class="mini-map__label"></div>
+        <div class="mini-map__pin"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

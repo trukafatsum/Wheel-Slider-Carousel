@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keşfet</title>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: #08090c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, sans-serif;
+            overflow: hidden;
+        }
+
+        /* ── Ana kapsayıcı ─────────────────────────────────── */
+        .shell {
+            position: relative;
+            width: min(92vw, 960px);
+            aspect-ratio: 16 / 9;
+            display: flex;
+            align-items: stretch;
+        }
+
+        /* ── iframe kartı ──────────────────────────────────── */
+        .card {
+            flex: 1 1 auto;
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 48px rgba(0, 0, 0, 0.72);
+        }
+
+        .card iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ── Sağ yan sekme çubuğu ──────────────────────────── */
+        .nav-rail {
+            flex: 0 0 auto;
+            width: 54px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 0;
+            margin-left: 10px;
+        }
+
+        /* ── Sekme düğmesi ─────────────────────────────────── */
+        .nav-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.45);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 220ms, color 220ms, border-color 220ms, transform 160ms;
+            outline: none;
+            position: relative;
+        }
+
+        .nav-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.85);
+            border-color: rgba(255, 255, 255, 0.22);
+            transform: scale(1.06);
+        }
+
+        .nav-btn.is-active {
+            background: rgba(255, 255, 255, 0.14);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.32);
+        }
+
+        /* Aktif göstergesi — sol kenar çizgisi */
+        .nav-btn.is-active::before {
+            content: "";
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 22px;
+            border-radius: 2px;
+            background: #fff;
+            opacity: 0.7;
+        }
+
+        /* ── Tooltip (title) yerine CSS tooltip ───────────── */
+        .nav-btn[data-tip]::after {
+            content: attr(data-tip);
+            position: absolute;
+            right: calc(100% + 10px);
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(20, 20, 24, 0.92);
+            color: #fff;
+            font-size: 11px;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            padding: 4px 9px;
+            border-radius: 6px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 160ms;
+        }
+
+        .nav-btn[data-tip]:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="shell">
+
+        <!-- ── iframe kartı ───────────────────────────────── -->
+        <div class="card">
+            <iframe id="main-frame" src="index-destination-turkey.html" title="İçerik"></iframe>
+        </div>
+
+        <!-- ── Sağ navigasyon ─────────────────────────────── -->
+        <nav class="nav-rail" aria-label="Kategori seç">
+            <!-- Turizm -->
+            <button class="nav-btn is-active" data-src="index-destination-turkey.html" data-tip="Gezi & Turizm"
+                aria-label="Gezi ve Turizm">
+                <svg viewBox="0 0 24 24">
+                    <!-- küre kontur -->
+                    <circle cx="12" cy="12" r="9" />
+                    <!-- yatay meridyen -->
+                    <path d="M3 12 Q7 9 12 12 Q17 15 21 12" />
+                    <!-- dikey meridyen -->
+                    <path d="M12 3 Q9 7 12 12 Q15 17 12 21" />
+                </svg>
+            </button>
+            <!-- Film / Dizi -->
+            <button class="nav-btn" data-src="index-film-series.html" data-tip="Film & Dizi" aria-label="Film ve Dizi">
+                <svg viewBox="0 0 24 24">
+                    <!-- kamera gövdesi -->
+                    <rect x="2" y="6" width="14" height="12" rx="2.5" />
+                    <!-- lens -->
+                    <circle cx="9" cy="12" r="3.2" />
+                    <!-- video ışığı / kamera kafası -->
+                    <polyline points="16 9 22 6 22 18 16 15" />
+                </svg>
+            </button>
+            <!-- Oyun -->
+            <button class="nav-btn" data-src="index-gaming.html" data-tip="Oyun" aria-label="Oyun">
+                <svg viewBox="0 0 24 24">
+                    <!-- gamepad gövdesi -->
+                    <rect x="2" y="7" width="20" height="12" rx="5" />
+                    <!-- d-pad yatay -->
+                    <line x1="6" y1="13" x2="10" y2="13" />
+                    <!-- d-pad dikey -->
+                    <line x1="8" y1="11" x2="8" y2="15" />
+                    <!-- sağ düğmeler -->
+                    <circle cx="16" cy="11.5" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="18.5" cy="13" r="1" fill="currentColor" stroke="none" />
+                    <circle cx="16" cy="14.5" r="1" fill="currentColor" stroke="none" />
+                </svg>
+            </button>
+
+        </nav>
+    </div>
+
+    <script>
+        (function () {
+            var frame = document.getElementById("main-frame");
+            var btns = document.querySelectorAll(".nav-btn");
+
+            btns.forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    var src = btn.dataset.src;
+                    if (!src) return;
+                    btns.forEach(function (b) { b.classList.remove("is-active"); });
+                    btn.classList.add("is-active");
+                    frame.src = src;
+                });
+            });
+        })();
+    </script>
+
+</body>
+
+</html>

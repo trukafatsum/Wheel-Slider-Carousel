@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wheel Carousel</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!--
+    Section verileri — JS bu listeyi DOM'dan okur, section sayısı artınca çark otomatik eşit paylaşır.
+    Razor migrasyonu: <ol> içini @foreach (var s in Model.Sections) { <li data-id="@s.Id" ...></li> } ile oluştur.
+    data-sky / data-glow / data-glow-color / data-ridge / data-crater : boşlukla ayrılmış sayı/hex değerleri
+  -->
+  <ol id="section-data" hidden aria-hidden="true">
+    <li data-id="01" data-title="SeaSRO 110 Cap"
+      data-copy="Joymax iSRO döneminin orijinal 110 Cap deneyimi. Hiçbir skill değiştirilmedi, hiçbir sistem eklenmedi — sadece oyunun olması gerektiği hali. 2026'da yeniden başla."
+      data-action="ŞİMDİ OYNA" data-map-label="seasro.com · 110 Cap EU/CH"
+      data-logo="https://seasro.com/img/logo/seasro-100.webp"
+      data-image="https://seasro.com/img/pre-entry/europe-11dg-000.webp" data-year="2026 —"
+      data-genre="110 Cap · EU / CH" data-platform="Silkroad Online" data-sky="#0a0e1a #060810 #020307"
+      data-glow="0.46 0.42 0.44" data-glow-color="140 170 220" data-ridge="60 80 130" data-crater="0.42 0.52 0.18"
+      data-figure="0.44"></li>
+    <li data-id="02" data-title="ZSZC Online"
+      data-copy="1.300.000 TL ödül havuzuyla geri dönen efsane ZSZC. 105 Cap Only CH — İpek Yolu'nun en rekabetçi sunucularından biri. Grand Opening 08.05.2026."
+      data-action="KAYIT OL" data-map-label="play-zszc.com · 105 Cap Only CH"
+      data-logo="https://play-zszc.com/media/images/zszclogo.png"
+      data-image="https://seasro.com/img/pre-entry/china-10dg-100.webp" data-year="2026 —"
+      data-genre="105 Cap · Only CH" data-platform="Silkroad Online" data-sky="#1a0e04 #110a02 #060400"
+      data-glow="0.54 0.46 0.40" data-glow-color="220 140 60" data-ridge="130 80 40" data-crater="0.46 0.54 0.20"
+      data-figure="0.48"></li>
+    <li data-id="03" data-title="FlySRO 2. Sezon"
+      data-copy="12 Derecelendirme sistemi ve Moon/Sun güç mekaniğiyle 120 Cap EU/CH. Uzun soluklu emek sunucusu. Beta 01.05.2026 · Grand Opening 08.05.2026."
+      data-action="YERİNİ AL" data-map-label="flysro.online · 120 Cap EU/CH"
+      data-logo="https://i.hizliresim.com/kz5xqkw.png"
+      data-image="https://seasro.com/img/pre-entry/europe-11dg-100.webp" data-year="2026 —"
+      data-genre="120 Cap · EU / CH" data-platform="Silkroad Online" data-sky="#130a1e #0c0614 #040208"
+      data-glow="0.44 0.40 0.52" data-glow-color="160 100 220" data-ridge="40 60 140" data-crater="0.40 0.50 0.22"
+      data-figure="0.42"></li>
+    <li data-id="04" data-title="Pharos Online"
+      data-copy="2011'den beri sahnede. 1500+ aktif oyuncuyla canlı 120 Cap EU/CH sunucusu. Dengeli, adil, rekabetçi. Grand Opening 24.04.2026."
+      data-action="ŞİMDİ OYNA" data-map-label="play-pharos.online · 120 Cap EU/CH"
+      data-logo="https://www.play-pharos.online/img/logo.png"
+      data-image="https://play-zszc.com/media/images/background/background_chars2.png" data-year="2026 —"
+      data-genre="120 Cap · EU / CH" data-platform="Silkroad Online" data-sky="#1a1000 #110b00 #050400"
+      data-glow="0.52 0.44 0.40" data-glow-color="220 160 60" data-ridge="140 90 30" data-crater="0.46 0.52 0.18"
+      data-figure="0.46"></li>
+    <li data-id="06" data-title="vSRO-TR"
+      data-copy="Türkiye'nin 80 Cap Only CH PvP sunucusu. Dengeli skill yapısı, kervan ticareti ve kale savaşlarıyla aktif bir topluluk. Efsane yeniden yaşanıyor."
+      data-action="KAYIT OL" data-map-label="vsrotr.com · 80 Cap Only CH"
+      data-logo="https://i.hizliresim.com/f8ifwnc.png" data-image="https://vsrotr.com/media/images/bg.jpg"
+      data-year="2026 —" data-genre="80 Cap · Only CH" data-platform="Silkroad Online"
+      data-sky="#18060a #100406 #060202" data-glow="0.52 0.44 0.46" data-glow-color="200 60 100" data-ridge="120 50 70"
+      data-crater="0.48 0.52 0.18" data-figure="0.44"></li>
+  </ol>
+
+  <div class="board-card">
+    <main class="scene" data-default-section="01" aria-label="Gorsel arayuz calismasi">
+      <div class="background background--current" aria-hidden="true"></div>
+      <div class="background background--next" aria-hidden="true"></div>
+      <canvas id="terrainCanvas" aria-hidden="true"></canvas>
+      <div class="grain" aria-hidden="true"></div>
+      <div class="shade" aria-hidden="true"></div>
+
+      <button class="info-button" aria-label="Bilgi" aria-expanded="false">
+        <span>i</span>
+      </button>
+
+      <div class="info-panel" aria-hidden="true">
+        <p class="info-panel__year"></p>
+        <p class="info-panel__genre"></p>
+        <p class="info-panel__platform"></p>
+        <p class="info-panel__source"></p>
+      </div>
+
+      <section class="wheel" aria-label="Bolum navigasyonu">
+        <div class="wheel__outer">
+          <div class="wheel__active-slice"></div>
+          <div class="wheel__segments"></div>
+        </div>
+        <div class="wheel__lens" aria-hidden="true">
+          <span class="wheel__lens-title" style="visibility: hidden;"></span>
+        </div>
+        <div class="wheel__labels"></div>
+      </section>
+
+      <section class="content" aria-label="Aktif bolum icerigi" aria-live="polite">
+        <h1></h1>
+        <span class="rule" aria-hidden="true"></span>
+        <p></p>
+        <button class="cta" type="button"></button>
+      </section>
+
+      <aside class="mini-map" aria-label="Mini harita">
+        <div class="mini-map__line mini-map__line--h"></div>
+        <div class="mini-map__line mini-map__line--v"></div>
+        <div class="mini-map__label"></div>
+        <div class="mini-map__pin"></div>
+      </aside>
+    </main>
+  </div>
+  <script src="script.js"></script>
+  <script src="gaming-overlay.js"></script>
+</body>
+
+</html>
